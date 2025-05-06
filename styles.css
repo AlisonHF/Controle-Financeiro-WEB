@@ -1,0 +1,34 @@
+#conteudo-principal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+}
+
+#campos-data {
+    display: flex;
+    width: 100%;
+}
+
+#espaco-validador {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-top: 20px;
+    color: red;
+    font-weight: bold;
+
+}
+
+/* Página consulta */
+
+.mensagem-aviso-consulta {
+    color: red;
+    text-align: center;
+}
