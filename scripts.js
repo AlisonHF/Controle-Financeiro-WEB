@@ -66,7 +66,20 @@ if (document.body.id === "pagina-adicionar") {
 
 
     // Funções
-    let formularios_enviados = Array();
+
+    function criaOuAlteraId() {
+        if (localStorage.getItem('id') === null) {
+            console.log('ID criado');
+            localStorage.setItem('id', 0);
+            return 0;
+        }
+
+        else {
+            let proximo_id = parseInt(localStorage.getItem('id')) + 1;
+            localStorage.setItem('id', proximo_id);
+            return proximo_id;
+        }
+    }
 
     // Função preencher formulario com os dados do cliente
     function preencherFormulario() {
@@ -83,13 +96,17 @@ if (document.body.id === "pagina-adicionar") {
         let div_validador = document.getElementById('espaco-validador');
         div_validador.innerHTML = '';
 
+        // Pega os valores preenchidos
         preencherFormulario();
 
+        // Verifica os campos
         let data_valido = formulario.validarData();
         let tipo_valido = formulario.validarTipo();
         let descricao_valido = formulario.validarDescricao();
         let valor_valido = formulario.validarValor();
 
+
+        // Se válido 
         if (data_valido && tipo_valido && descricao_valido && valor_valido) {
             console.log('Formulário válido');
 
@@ -101,13 +118,7 @@ if (document.body.id === "pagina-adicionar") {
                 valor : formatarValor(formulario.valor)
             }
 
-            // Cria um Array que pega todos os dados já salvos no local storage
-            let dados_salvos = localStorage.getItem('formularios');
-            let formularios_enviados = dados_salvos ? JSON.parse(dados_salvos) : []; // Pega os dados que estão no local storage que são strings e converte para array
-
-            formularios_enviados.push(dados_form); // Cria um novo formulario e coloca no array
-
-            localStorage.setItem('formularios', JSON.stringify(formularios_enviados)); // Envia para o localstorage
+            localStorage.setItem(criaOuAlteraId(), JSON.stringify(dados_form));
 
             limparCampos()
 
@@ -156,25 +167,39 @@ if (document.body.id === "pagina-adicionar") {
 
 else if (document.body.id === "pagina-consultar") {
 
-    const corpo_tabela = document.getElementById('tabela-corpo');
-    let dados_tabela = document.getElementById('tabela-dados');
-    const dados_brutos = localStorage.getItem('formularios');
-    let array = JSON.parse(dados_brutos);
+    let dados_tabela = document.getElementById('dados_tabela');
+    let ultimo_id = localStorage.getItem('id');
 
-    function mostrarDespesas() {
-        if (array === null){
-            corpo_tabela.innerHTML = '<h2 class="mensagem-aviso-consulta">Sem dados para mostrar, cadastre os dados para ver nessa tela!</h2>';
-        } else {
-            array.forEach((objeto) => {
-                dados_tabela.innerHTML += `<tr>
-                <td>${objeto.tipo}</th>
-                <td>${objeto.descricao}</th>
-                <td>${objeto.valor}</th>
-                <td>${objeto.data}</th>
-                </tr>`
-            });
+    function consultaDespesas() {
+        for(let x = 0; x <= ultimo_id; x++){
+
+            let despesa_atual = JSON.parse(localStorage.getItem(x));
+
+            if (despesa_atual === null) {
+                console.log('Despesa vazia');
+                continue;
+            }
+
+            let botao_exclusao = document.createElement('button');
+            botao_exclusao.className = 'btn btn-danger';
+            botao_exclusao.innerHTML = 'X';
+            botao_exclusao.onclick = function() {
+                localStorage.removeItem(x)
+            };
+
+
+            let linha = dados_tabela.insertRow();
+            let tipo = linha.insertCell(0);
+            let descricao = linha.insertCell(1);
+            let valor = linha.insertCell(2);
+            let data = linha.insertCell(3);
+            linha.insertCell(4).append(botao_exclusao);
+
+            tipo.innerHTML = despesa_atual.tipo;
+            descricao.innerHTML = despesa_atual.descricao;
+            valor.innerHTML = despesa_atual.valor;
+            data.innerHTML = despesa_atual.data;
+            
         }
-        
     }
-
 }

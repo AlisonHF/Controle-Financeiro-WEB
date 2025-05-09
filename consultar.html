@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="styles.css">
     </head>
 
-    <body onload="mostrarDespesas()" id="pagina-consultar">
+    <body onload="consultaDespesas()" id="pagina-consultar">
 
         <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
             <div class="container-fluid">
@@ -34,15 +34,16 @@
           <div id="conteudo-principal">
             <h1 class="m-5">Consultar despesa</h1>
 
-            <table class="table table-striped" style="width: 90%;" id="tabela-corpo">
+            <table class="table table-striped" style="width: 90%;" id="corpo_tabela">
               <thead>
                 <th scope="col">Tipo de despesa</th>
                 <th scope="col">Descrição</th>
                 <th scope="col">Valor</th>
                 <th scope="col">Data</th>
+                <th scope="col">Ação</th>
               </thead>
 
-              <tbody id="tabela-dados">
+              <tbody id="dados_tabela">
 
               </tbody>
             
